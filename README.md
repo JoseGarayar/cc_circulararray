@@ -1,5 +1,4 @@
-# Integrante 1: ____   _______
-# Integrante 2: ____   _______
+# Integrante 1: Jose Garayar
 
 # Circular Array
 - Implementar todas las funciones del array circular en el "circulararray.h"

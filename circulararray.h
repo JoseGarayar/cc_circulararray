@@ -40,8 +40,12 @@ public:
             array[back] = data;
         }
     };
-    void insert(T data, int pos);
+    void insert(T data, int pos) {
+        array[front] = data;
+        front = (front + 1) % size();
+    };
     T pop_front() {
+        int return_val;
         if (is_empty()) {
             cout << "No values in array" << endl; 
         }
@@ -50,10 +54,13 @@ public:
             back = -1;
         }
         else {
-            front = (front + 1) % capacity
+            return_val = array[front];
+            front = (front + 1) % capacity;
         }
+        return return_val;
     };
     T pop_back() {
+        int return_val;
         if (is_empty()) {
             cout << "No values in array" << endl;
         }
@@ -62,8 +69,10 @@ public:
             back = -1;
         }
         else {
+            return_val = array[back];
             back = (back - 1 + capacity) % capacity;
         }
+        return return_val;
     };
     bool is_full() {
         return (back + 1) % capacity == front;
@@ -86,16 +95,60 @@ public:
         front = -1;
         back = -1;
     };
-    T& operator[](int) {
-        if (is_empty( || int < 0 || int >= getSize())) {
-            cout << "Invalid value" << endl
+    T& operator[](int i) {
+        if (is_empty() || i < 0 || i >= size()) {
+            cout << "Invalid value" << endl;
         }
-        return array[int]
+        return array[i];
     };    
-    void sort();
-    bool is_sorted();
-    void reverse();
-    string to_string(string sep=" ");
+    void sort() {
+        int i, j, temp;
+        int actual_size = size();
+        for (int i = 0; i < actual_size; i++) {
+            for (int j = i + 1; j < actual_size; j++) {
+                int current = (front + i) % actual_size;
+                int next = (front + j) % actual_size;
+                if (array[current] > array[next]) {
+                    temp = array[current];
+                    array[current] = array[next];
+                    array[next] = temp;
+                }
+            }
+        }
+    };
+    bool is_sorted() {
+        int actual_size = size();
+        for (int i = 0; i < actual_size - 1; i++){
+            int current = (front + i) % actual_size;
+            int next = (front + i + 1) % actual_size;
+            if (array[current] > array[next]) {
+                return false;
+            }
+        }
+        return true;
+    };
+    void reverse() {
+        int i, j, temp;
+        int actual_size = size();
+        for (i = 0, j = actual_size - 1; i < j; i++, j--) {
+            int current = (front + i) % actual_size;
+            int reverse = (front + j) % actual_size;
+            temp = array[current];
+            array[current] = array[reverse];
+            array[reverse] = temp;
+        }
+    };
+    string to_string(string sep=" ") {
+        if (is_empty()) {
+            cout << "No elements" << endl;
+        }
+        string return_val = "";
+        for (int i = 0; i < size(); i++) {
+            auto s = std::to_string(array[i]);
+            return_val.append(s + sep);
+        }
+        return return_val;
+    };
 
 private:
     int next(int);
